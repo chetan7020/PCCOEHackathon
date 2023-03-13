@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/owner_navigation_food"
+        android:icon="@drawable/baseline_food_bank_24"
+        android:title="Food" />
+
+    <item
+        android:id="@+id/owner_navigation_customer"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        android:title="Customer" />
+
+    <item
+        android:id="@+id/owner_navigation_profile"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Profile" />
+
+</menu>

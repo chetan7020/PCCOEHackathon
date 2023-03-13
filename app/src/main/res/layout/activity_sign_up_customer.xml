@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpCustomer">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/linear_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="smart"
+                android:textSize="40dp"
+                android:textColor="#fe724d"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingLeft="1dp"
+                android:text="mess"
+                android:textColor="@color/black"
+                android:textSize="38dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linear_layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/linear_layout_1"
+            android:layout_marginTop="15dp"
+            android:padding="20dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center_horizontal"
+                android:text="Create a new account"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/poppins"
+                android:text="Please put your information below to create a new account for using app."
+                android:textAlignment="center"
+                android:textColor="#a6a7af"
+                android:textSize="17dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linear_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_2"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="10dp">
+
+
+            <EditText
+                android:id="@+id/etname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/editext_drawable"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Full Name"
+                android:padding="16dp" />
+
+            <EditText
+                android:id="@+id/etemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/editext_drawable"
+                android:drawableRight="@drawable/baseline_check_circle_outline_24"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Email"
+                android:padding="16dp" />
+
+
+
+            <EditText
+                android:id="@+id/etphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/editext_drawable"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:padding="16dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/dark_grey"
+                app:hintEnabled="false"
+                android:layout_marginTop="20dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/editext_drawable"
+                    android:fontFamily="@font/poppins_medium"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="16dp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/editext_drawable"
+                android:fontFamily="@font/poppins_medium"
+                android:padding="16dp"
+                android:hint="Select Preferences"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvPreference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+            <Button
+                android:id="@+id/btnregister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:backgroundTint="@color/orange"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="15dp"
+                android:text="Register Now"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/linear_layout_3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account?"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/btnlogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login Now"
+                android:textSize="16dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="#fe724d"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="10dp"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+
+</ScrollView>

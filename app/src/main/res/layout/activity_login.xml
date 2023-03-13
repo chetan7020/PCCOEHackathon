@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="smart"
+            android:textSize="40dp"
+            android:textColor="#fe724d"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:paddingLeft="1dp"
+            android:text="mess"
+            android:textColor="@color/black"
+            android:textSize="38dp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/linear_layout_1"
+        android:layout_marginTop="20dp"
+        android:padding="20dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to smartmess"
+            android:textSize="25dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/poppins"
+            android:text="Please enter your address below to start using app."
+            android:textAlignment="center"
+            android:textColor="#a6a7af"
+            android:textSize="17dp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_2"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_marginTop="25dp">
+
+
+
+        <EditText
+            android:id="@+id/etemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/editext_drawable"
+            android:padding="16dp"
+            android:drawableRight="@drawable/baseline_check_circle_outline_24"
+            android:hint="Email"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/dark_grey"
+            app:hintEnabled="false"
+            android:layout_marginTop="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/editext_drawable"
+                android:padding="16dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:fontFamily="@font/poppins_medium"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/orange"
+            android:textAlignment="textEnd"
+            android:textSize="15dp"/>
+
+
+
+
+
+        <Button
+            android:id="@+id/btnlogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:padding="15dp"
+            android:background="@drawable/button_drawable"
+            android:text="Sign in"
+            android:textSize="17dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"/>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_3"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btnregistercustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Customer SignUp"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/orange"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/poppins_semibold"/>
+
+        <TextView
+            android:id="@+id/btnregisterowner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner SignUp"
+            android:textSize="16dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textAlignment="center"
+            android:textColor="@color/orange"
+            android:paddingLeft="10dp"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</RelativeLayout>
+
+</ScrollView>

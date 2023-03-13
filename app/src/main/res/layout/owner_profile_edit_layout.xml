@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center_horizontal"
+        android:text="Edit Your Profile"
+        android:textColor="@color/black"
+        android:textSize="25dp" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editext_drawable"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Name"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/etMessName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editext_drawable"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Mess Name"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/etUPI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editext_drawable"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="UPI"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"/>
+
+
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editext_drawable"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Phone Number"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/editext_drawable"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Location"
+            android:layout_marginRight="5dp"
+            android:padding="16dp"
+            />
+
+        <Button
+            android:id="@+id/btnChangeLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/orange"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:paddingHorizontal="15dp"
+            android:layout_marginTop="10dp"
+            android:text="Change Location"
+            android:textColor="@color/white"
+            android:textSize="17dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSaveChanges"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/poppins_semibold"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Save Changes"
+        android:textColor="@color/white"
+        android:textSize="17dp" />
+
+
+</LinearLayout>
