@@ -41,6 +41,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -55,17 +58,15 @@ import java.util.Locale;
 
 public class map extends AppCompatActivity implements OnMapReadyCallback {
 
-
     SupportMapFragment smf;
     FusedLocationProviderClient client;
     private SearchView searchview;
     private GoogleMap map;
     private Button setlocation;
 
+    double lat, lang;
+
     String lction;
-
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -75,20 +76,19 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
         searchview = findViewById(R.id.searchview);
         smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         client = LocationServices.getFusedLocationProviderClient(this);
-
         setlocation = findViewById(R.id.setlocation);
 
 
         setlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    Log.d("TAG", "onClick:  apple");
-                    Intent intent = new Intent();
-                    intent.putExtra("bye", lction);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-
+                setlocation.setEnabled(false);
+                Intent intent = new Intent();
+                intent.putExtra("location", lction);
+                intent.putExtra("lat", String.valueOf(lat));
+                intent.putExtra("lang", String.valueOf(lang));
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -105,26 +105,23 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
 
-                        if(permissionDeniedResponse.isPermanentlyDenied())
-                        {
+                        if (permissionDeniedResponse.isPermanentlyDenied()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(map.this);
                             builder.setTitle("Permission Denied");
                             builder.setMessage("Permission to access device location is permenantly denied. you need to go to setting to allow permission");
-                            builder.setNegativeButton("Cancel",null);
+                            builder.setNegativeButton("Cancel", null);
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    Intent intent =new Intent();
+                                    Intent intent = new Intent();
                                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    intent.setData(Uri.fromParts("packages",getPackageName(),null));
+                                    intent.setData(Uri.fromParts("packages", getPackageName(), null));
 
                                 }
                             }).show();
-                        }
-                        else
-                        {
-                            Intent intent = new Intent(com.safar.pccoehackathon.map.this,OwnerSignUpActivity.class);
+                        } else {
+                            Intent intent = new Intent(com.safar.pccoehackathon.map.this, OwnerSignUpActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -167,17 +164,17 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
                         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
-                        if(location!=null)
-                        {
+                        if (location != null) {
                             Geocoder geocoder = new Geocoder(map.this, Locale.getDefault());
                             List<Address> addresses = null;
                             try {
-                                addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 lction = (addresses.get(0).getAddressLine(0));
+                                lat = location.getLatitude();
+                                lang = location.getLongitude();
                                 setlocation.setEnabled(true);
 
-                            } catch (IOException e)
-                            {
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
@@ -207,13 +204,11 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
                         Address ad = addresses.get(0);
                         LatLng latLng = new LatLng(ad.getLatitude(), ad.getLongitude());
                         lction = ad.getAddressLine(0).toString();
-                        Log.d("Location", "" + ad.getLatitude());
                         map.addMarker(new MarkerOptions().position(latLng).title(location));
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                         setlocation.setEnabled(true);
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(),"Please enter correct location",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please enter correct location", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -230,14 +225,8 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map=googleMap;
+        map = googleMap;
     }
-
-
-
-
-
-
 
 
 }

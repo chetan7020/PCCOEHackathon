@@ -4,8 +4,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class UserModel {
     private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice;
-    GeoPoint geo_pointLocation;
 
+    double lat, lang;
+
+    GeoPoint geoPointLocation;
     public UserModel(String name, String messname, String ownerphone) {
         this.name = name;
         this.messname = messname;
@@ -29,7 +31,31 @@ public class UserModel {
         this.remainingPayment = remainingPayment;
     }
 
-    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, GeoPoint geo_pointLocation) {
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLang() {
+        return lang;
+    }
+
+    public void setLang(double lang) {
+        this.lang = lang;
+    }
+
+    public GeoPoint getGeoPointLocation() {
+        return geoPointLocation;
+    }
+
+    public void setGeoPointLocation(GeoPoint geoPointLocation) {
+        this.geoPointLocation = geoPointLocation;
+    }
+
+    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, double lat, double lang, GeoPoint geoPointLocation) {
         this.name = name;
         this.id = id;
         this.messname = messname;
@@ -40,15 +66,9 @@ public class UserModel {
         this.remainingPayment = "0";
         this.monthlyPrice = monthlyPrice;
         this.location = location;
-        this.geo_pointLocation = geo_pointLocation;
-    }
-
-    public GeoPoint getGeo_pointLocation() {
-        return geo_pointLocation;
-    }
-
-    public void setGeo_pointLocation(GeoPoint geo_pointLocation) {
-        this.geo_pointLocation = geo_pointLocation;
+        this.geoPointLocation = geoPointLocation;
+        this.lat = lat;
+        this.lang = lang;
     }
 
     public String getLocation() {

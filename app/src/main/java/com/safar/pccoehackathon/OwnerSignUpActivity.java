@@ -41,12 +41,14 @@ import java.util.Locale;
 
 public class OwnerSignUpActivity extends AppCompatActivity {
 
+    private static final String TAG = "OwnerSignUpActivity";
+
+    double lat, lang;
     ActivityOwnerSignUpBinding binding;
     FirebaseAuth auth;
-    ProgressDialog progressDialog;
     FirebaseFirestore firebaseFirestore;
+    ProgressDialog progressDialog;
     FusedLocationProviderClient fusedLocationProviderClient;
-    double lat, lang;
     private final static int REQUEST_CODE=100;
     String sample,currentlocation;
     @Override
@@ -155,13 +157,9 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
                                     Intent intent = new Intent(OwnerSignUpActivity.this, LoginActivity.class);
 
-                                    GeoPoint geo_pointLocation = new GeoPoint(lat, lang);
-
                                     firebaseFirestore.collection("Owner")
                                             .document(email)
-                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, geo_pointLocation));
-
-                                    //(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, String lat, String lang)
+                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, lat, lang, new GeoPoint(lat, lang)));
 
                                     startActivity(intent);
                                     progressDialog.cancel();
@@ -220,9 +218,6 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                                 List<Address> addresses = null;
                                 try {
                                     addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
-                                    binding.etlocation.setText(addresses.get(0).getAddressLine(0));
-                                    lat = addresses.get(0).getLatitude();
-                                    lang = addresses.get(0).getLongitude();
 
                                 } catch (IOException e)
                                 {
@@ -279,7 +274,11 @@ public class OwnerSignUpActivity extends AppCompatActivity {
         {
             if(resultCode == Activity.RESULT_OK)
             {
-                currentlocation = data.getStringExtra("bye");
+                currentlocation = data.getStringExtra("location");
+                lat = Double.parseDouble(data.getStringExtra("lat"));
+                lang = Double.parseDouble(data.getStringExtra("lang"));
+                Log.d(TAG, "onActivityResult: "+data.getStringExtra("lat"));
+                Log.d(TAG, "onActivityResult: "+data.getStringExtra("lang"));
                 Toast.makeText(this, currentlocation, Toast.LENGTH_SHORT).show();
                 binding.etlocation.setText(currentlocation);
             }

@@ -114,15 +114,20 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void getAllOwners(double lat, double lang) {
-        Log.d("TAG", "getAllOwners: "+String.valueOf(lat)+","+String.valueOf(lang));
-        double radius = 20;
+        int radius = 5;
         GeoPoint center = new GeoPoint(lat, lang);
 
+        Log.d("TAG", "getAllOwners: "+getBoundingBox(center, radius).get(1));
+        Log.d("TAG", "getAllOwners: "+getBoundingBox(center, radius).get(0));
 
         firebaseFirestore
                 .collection("Owner")
-                .whereLessThanOrEqualTo("geo_pointLocation", getBoundingBox(center, radius).get(1))
-                .whereGreaterThanOrEqualTo("geo_pointLocation", getBoundingBox(center, radius).get(0))
+                .orderBy("lat")
+                .startAt(calculateMinLatitude(lat, lang, radius))
+                .endAt(calculateMaxLatitude(lat, lang, radius))
+                .orderBy("lang")
+                .startAt(calculateMinLongitude(lat, lang, radius))
+                .endAt(calculateMaxLongitude(lat, lang, radius))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -132,6 +137,9 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                             String location = dc.getDocument().getData().get("location").toString();
                             String monthlyPrice = dc.getDocument().getData().get("monthlyPrice").toString();
                             String email = dc.getDocument().getData().get("email").toString();
+
+                            GeoPoint lc = dc.getDocument().getGeoPoint("geo_pointLocation");
+
                             switch (dc.getType()) {
                                 case ADDED:
                                     Log.d("TAG", "onEvent: " + "ADDED");
@@ -273,4 +281,28 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 
     }
+    public static double calculateMinLatitude(double lat, double lng, int radius) {
+        double r = 6371; // Earth's radius in km
+        double latRadius = radius / r * (180 / Math.PI); // Convert radius from km to degrees
+        return lat - latRadius;
+    }
+
+    public static double calculateMaxLatitude(double lat, double lng, int radius) {
+        double r = 6371; // Earth's radius in km
+        double latRadius = radius / r * (180 / Math.PI); // Convert radius from km to degrees
+        return lat + latRadius;
+    }
+
+    public static double calculateMinLongitude(double lat, double lng, int radius) {
+        double r = 6371; // Earth's radius in km
+        double lngRadius = radius / (r * Math.cos(Math.PI / 180 * lat)); // Convert radius from km to degrees
+        return lng - lngRadius;
+    }
+
+    public static double calculateMaxLongitude(double lat, double lng, int radius) {
+        double r = 6371; // Earth's radius in km
+        double lngRadius = radius / (r * Math.cos(Math.PI / 180 * lat)); // Convert radius from km to degrees
+        return lng + lngRadius;
+    }
+
 }
