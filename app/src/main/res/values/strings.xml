@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PCCOEHackathon</string>
+    <string name="app_name">Smart Mess</string>
     <string name="title_activity_owner_main">OwnerMainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

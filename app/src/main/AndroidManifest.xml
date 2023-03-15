@@ -59,7 +59,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".owner.OwnerMainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_owner_main"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
