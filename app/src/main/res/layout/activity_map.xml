@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".map">
+
+
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchview"
+        app:queryHint="Serach....."
+        app:iconifiedByDefault="false"
+        android:elevation="10dp"
+        android:layout_margin="10dp" />
+
+    <Button
+        android:id="@+id/setlocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="set location"
+        android:layout_centerHorizontal="true"/>
+
+
+    <fragment
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/google_map"
+        android:layout_above="@id/setlocation"
+        android:layout_below="@id/searchview"
+        android:layout_marginTop="30dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+
+
+
+
+
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.safar.pccoehackathon;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,6 +9,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +20,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class OwnerSignUpActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     double lat, lang;
     private final static int REQUEST_CODE=100;
+    String sample,currentlocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,9 @@ public class OwnerSignUpActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Register Now");
         progressDialog.setMessage("Please wait loading");
+
+
+
 
         binding.etemail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -153,23 +160,12 @@ public class OwnerSignUpActivity extends AppCompatActivity {
 
                                     firebaseFirestore.collection("Owner")
                                             .document(email)
-                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, geo_pointLocation))
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            startActivity(intent);
-                                                            progressDialog.cancel();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(OwnerSignUpActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    progressDialog.cancel();
-                                                }
-                                            });
+                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, geo_pointLocation));
 
                                     //(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, String lat, String lang)
 
+                                    startActivity(intent);
+                                    progressDialog.cancel();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -177,6 +173,7 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(OwnerSignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     progressDialog.cancel();
+
                                 }
                             });
 
@@ -197,7 +194,12 @@ public class OwnerSignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                getLastLocation();
+                Intent intent =new Intent(OwnerSignUpActivity.this,map.class);
+                intent.putExtra("passdata",currentlocation);
+                startActivityForResult(intent,REQUEST_CODE);
+
+
+//                getLastLocation();
 
             }
         });
@@ -270,4 +272,18 @@ public class OwnerSignUpActivity extends AppCompatActivity {
         return id;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                currentlocation = data.getStringExtra("bye");
+                Toast.makeText(this, currentlocation, Toast.LENGTH_SHORT).show();
+                binding.etlocation.setText(currentlocation);
+            }
+        }
+    }
 }
