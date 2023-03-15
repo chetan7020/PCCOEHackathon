@@ -3,7 +3,7 @@ package com.safar.pccoehackathon;
 import com.google.firebase.firestore.GeoPoint;
 
 public class UserModel {
-    private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice;
+    private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice, geohash;
 
     double lat, lang;
 
@@ -55,7 +55,15 @@ public class UserModel {
         this.geoPointLocation = geoPointLocation;
     }
 
-    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, double lat, double lang, GeoPoint geoPointLocation) {
+    public String getGeohash() {
+        return geohash;
+    }
+
+    public void setGeohash(String geohash) {
+        this.geohash = geohash;
+    }
+
+    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, double lat, double lang, GeoPoint geoPointLocation, String geohash) {
         this.name = name;
         this.id = id;
         this.messname = messname;
@@ -69,6 +77,7 @@ public class UserModel {
         this.geoPointLocation = geoPointLocation;
         this.lat = lat;
         this.lang = lang;
+        this.geohash = geohash;
     }
 
     public String getLocation() {

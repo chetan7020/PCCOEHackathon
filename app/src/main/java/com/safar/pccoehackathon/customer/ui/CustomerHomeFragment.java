@@ -114,20 +114,10 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void getAllOwners(double lat, double lang) {
-        int radius = 5;
-        GeoPoint center = new GeoPoint(lat, lang);
-
-        Log.d("TAG", "getAllOwners: "+getBoundingBox(center, radius).get(1));
-        Log.d("TAG", "getAllOwners: "+getBoundingBox(center, radius).get(0));
 
         firebaseFirestore
                 .collection("Owner")
-                .orderBy("lat")
-                .startAt(calculateMinLatitude(lat, lang, radius))
-                .endAt(calculateMaxLatitude(lat, lang, radius))
-                .orderBy("lang")
-                .startAt(calculateMinLongitude(lat, lang, radius))
-                .endAt(calculateMaxLongitude(lat, lang, radius))
+                .orderBy("geohash")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

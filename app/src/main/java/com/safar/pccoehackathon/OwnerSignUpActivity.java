@@ -25,6 +25,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -157,9 +159,11 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
                                     Intent intent = new Intent(OwnerSignUpActivity.this, LoginActivity.class);
 
+                                    String geohash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lang));
+
                                     firebaseFirestore.collection("Owner")
                                             .document(email)
-                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, lat, lang, new GeoPoint(lat, lang)));
+                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, lat, lang, new GeoPoint(lat, lang), geohash));
 
                                     startActivity(intent);
                                     progressDialog.cancel();
@@ -277,8 +281,6 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                 currentlocation = data.getStringExtra("location");
                 lat = Double.parseDouble(data.getStringExtra("lat"));
                 lang = Double.parseDouble(data.getStringExtra("lang"));
-                Log.d(TAG, "onActivityResult: "+data.getStringExtra("lat"));
-                Log.d(TAG, "onActivityResult: "+data.getStringExtra("lang"));
                 Toast.makeText(this, currentlocation, Toast.LENGTH_SHORT).show();
                 binding.etlocation.setText(currentlocation);
             }
