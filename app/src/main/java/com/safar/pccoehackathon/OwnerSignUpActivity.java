@@ -153,12 +153,23 @@ public class OwnerSignUpActivity extends AppCompatActivity {
 
                                     firebaseFirestore.collection("Owner")
                                             .document(email)
-                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, geo_pointLocation));
+                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, geo_pointLocation))
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            startActivity(intent);
+                                                            progressDialog.cancel();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(OwnerSignUpActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    progressDialog.cancel();
+                                                }
+                                            });
 
                                     //(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, String lat, String lang)
 
-                                    startActivity(intent);
-                                    progressDialog.cancel();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -166,7 +177,6 @@ public class OwnerSignUpActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(OwnerSignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     progressDialog.cancel();
-
                                 }
                             });
 
@@ -259,8 +269,5 @@ public class OwnerSignUpActivity extends AppCompatActivity {
         id = String.valueOf(System.currentTimeMillis());
         return id;
     }
-
-
-
 
 }

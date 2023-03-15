@@ -53,32 +53,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
                     android:paddingLeft="10dp"
-                    android:visibility="invisible"
                     android:paddingRight="10dp"
-                    android:text="ID : " />
+                    android:text="ID : "
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tvID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:fontFamily="@font/poppins" />
+                    android:fontFamily="@font/poppins"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,19 +128,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_marginTop="5dp"
+                android:layout_weight="3"
                 android:background="#d7e6fe">
 
                 <TextView
                     android:id="@+id/ivNext"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="center_horizontal"
                     android:padding="5dp"
                     android:text="Check here"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/poppins_semibold"/>
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 

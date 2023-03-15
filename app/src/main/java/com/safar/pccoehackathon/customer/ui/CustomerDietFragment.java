@@ -21,7 +21,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.safar.pccoehackathon.R;
 import com.safar.pccoehackathon.databinding.FragmentCustomerDietBinding;
-import com.safar.pccoehackathon.databinding.FragmentHomeBinding;
 
 public class CustomerDietFragment extends Fragment {
 

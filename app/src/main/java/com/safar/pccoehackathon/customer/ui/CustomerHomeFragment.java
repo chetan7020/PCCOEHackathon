@@ -1,8 +1,11 @@
 package com.safar.pccoehackathon.customer.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,34 +18,37 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.safar.pccoehackathon.OwnerSignUpActivity;
 import com.safar.pccoehackathon.R;
 import com.safar.pccoehackathon.customer.CustomerMessInfoActivity;
-import com.safar.pccoehackathon.customer.GeoFirestoreUtils;
 import com.safar.pccoehackathon.databinding.FragmentHomeBinding;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentHomeBinding binding;
-
     private FirebaseFirestore firebaseFirestore;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final static int REQUEST_CODE = 100;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,66 +56,72 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        getAllOwners();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        getLastLocation();
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = binding.searchView.getQuery().toString();
-                List<Address> addressList = null;
 
-                if (location != null || !location.equals("")) {
-                    Geocoder geocoder = new Geocoder(getActivity());
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Address address = addressList.get(0);
-
-                    double centerLatitude = address.getLatitude();
-                    double centerLongitude = address.getLongitude();
-                    double radius = 10.0; // in kilometers
-
-                    GeoPoint center = new GeoPoint(centerLatitude, centerLongitude);
-
-                    binding.llData.removeAllViews();
-
-                    firebaseFirestore
-                            .collection("Owner")
-                            .orderBy("geo_pointLocation", Query.Direction.ASCENDING)
-                            .whereGreaterThan("geo_pointLocation", GeoFirestoreUtils.getGeoPointAtLocation(center, radius))
-                            .whereLessThan("geo_pointLocation", GeoFirestoreUtils.getGeoPointAtLocation(center, radius))
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                        Log.d("TAG", "onSuccess: "+document.get("messname"));
-                                    }
-                                }
-                            });
-
-                }
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String query) {
+
+                for (int i = 0; i < binding.llData.getChildCount(); i++) {
+                    TextView tvMessName = binding.llData.getChildAt(i).findViewById(R.id.tvMessName);
+                    TextView tvLocation = binding.llData.getChildAt(i).findViewById(R.id.tvLocation);
+                    LinearLayout llView = binding.llData.getChildAt(i).findViewById(R.id.llView);
+
+                    if (!(tvMessName.getText().toString().toLowerCase().trim().contains(query.toLowerCase())
+                            || tvLocation.getText().toString().toLowerCase().trim().contains(query.toLowerCase()))) {
+
+                        llView.setVisibility(View.GONE);
+                    } else {
+                        llView.setVisibility(View.VISIBLE);
+                    }
+                }
+
                 return false;
             }
         });
-
 
         return binding.getRoot();
 
     }
 
+    private List<GeoPoint> getBoundingBox(GeoPoint center, double radius) {
+        double lat = center.getLatitude();
+        double lng = center.getLongitude();
 
-    private void getAllOwners() {
-        Log.d("TAG", "getAllOwners: ");
+        double earthRadius = 6371;
+        double latRadius = radius / earthRadius;
+        double lngRadius = radius / (earthRadius * Math.cos(Math.PI * lat / 180));
+
+        double minLat = lat - latRadius * 180 / Math.PI;
+        double maxLat = lat + latRadius * 180 / Math.PI;
+        double minLng = lng - lngRadius * 180 / Math.PI;
+        double maxLng = lng + lngRadius * 180 / Math.PI;
+
+        GeoPoint southwest = new GeoPoint(minLat, minLng);
+        GeoPoint northeast = new GeoPoint(maxLat, maxLng);
+        List<GeoPoint> boundingBox = new ArrayList<>();
+        boundingBox.add(southwest);
+        boundingBox.add(northeast);
+
+        return boundingBox;
+    }
+
+    private void getAllOwners(double lat, double lang) {
+        double radius = 20;
+        GeoPoint center = new GeoPoint(lat, lang);
+
         firebaseFirestore
                 .collection("Owner")
+                .whereLessThanOrEqualTo("geo_pointLocation", getBoundingBox(center, radius).get(1))
+                .whereGreaterThanOrEqualTo("geo_pointLocation", getBoundingBox(center, radius).get(0))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -176,6 +188,7 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     private void createCard(String id, String messname, String location, String monthlyPrice, String email) {
         View messView = getLayoutInflater().inflate(R.layout.activity_layout_customer_mess_container, null, false);
 
+
         TextView tvMessName, tvMonthlyPrice, tvLocation, tvMail, tvID;
         LinearLayout llView;
 
@@ -203,6 +216,56 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         });
 
         binding.llData.addView(messView);
+    }
+
+    private void getLastLocation() {
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+
+                            if (location != null) {
+                                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                                List<Address> addresses = null;
+                                try {
+                                    addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                    getAllOwners(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+                    });
+        } else {
+            askPermission();
+        }
+
+    }
+
+    private void askPermission() {
+
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Toast.makeText(getActivity(), "Please provide required Permission", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

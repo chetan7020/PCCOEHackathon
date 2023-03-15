@@ -4,7 +4,6 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class UserModel {
     private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice;
-
     GeoPoint geo_pointLocation;
 
     public UserModel(String name, String messname, String ownerphone) {
