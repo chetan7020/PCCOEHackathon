@@ -24,7 +24,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_key" />
+            android:value="AIzaSyC7wilNUv2jZnyOHmryiu2HkQi7KEb7K68" />
 
         <activity
             android:name=".customer.CustomerMessInfoActivity"
