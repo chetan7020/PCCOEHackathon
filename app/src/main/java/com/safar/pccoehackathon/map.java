@@ -5,18 +5,22 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -47,6 +51,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class map extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -72,27 +77,17 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
         client = LocationServices.getFusedLocationProviderClient(this);
 
         setlocation = findViewById(R.id.setlocation);
-        setlocation.setEnabled(false);
 
 
         setlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                if(searchview.getQuery().toString().isEmpty())
-                {
-                    Toast.makeText(map.this, "Enter location first", Toast.LENGTH_SHORT).show();
-                }
-                else {
                     Log.d("TAG", "onClick:  apple");
                     Intent intent = new Intent();
                     intent.putExtra("bye", lction);
                     setResult(Activity.RESULT_OK, intent);
                     finish();
-                }
-
-
 
             }
         });
@@ -109,6 +104,30 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                        if(permissionDeniedResponse.isPermanentlyDenied())
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(map.this);
+                            builder.setTitle("Permission Denied");
+                            builder.setMessage("Permission to access device location is permenantly denied. you need to go to setting to allow permission");
+                            builder.setNegativeButton("Cancel",null);
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    Intent intent =new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.fromParts("packages",getPackageName(),null));
+
+                                }
+                            }).show();
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(com.safar.pccoehackathon.map.this,OwnerSignUpActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
 
                     }
 
@@ -148,8 +167,21 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
                         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
+                        if(location!=null)
+                        {
+                            Geocoder geocoder = new Geocoder(map.this, Locale.getDefault());
+                            List<Address> addresses = null;
+                            try {
+                                addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                lction = (addresses.get(0).getAddressLine(0));
+                                setlocation.setEnabled(true);
 
+                            } catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            }
 
+                        }
 
                     }
                 });
@@ -196,12 +228,16 @@ public class map extends AppCompatActivity implements OnMapReadyCallback {
         smf.getMapAsync(this);
     }
 
-
-
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map=googleMap;
     }
+
+
+
+
+
+
+
+
 }

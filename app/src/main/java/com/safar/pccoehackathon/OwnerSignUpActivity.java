@@ -71,7 +71,6 @@ public class OwnerSignUpActivity extends AppCompatActivity {
 
 
 
-
         binding.etemail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

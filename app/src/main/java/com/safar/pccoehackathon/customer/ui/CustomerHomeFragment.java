@@ -63,7 +63,6 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 return false;
             }
 
@@ -115,8 +114,10 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void getAllOwners(double lat, double lang) {
+        Log.d("TAG", "getAllOwners: "+String.valueOf(lat)+","+String.valueOf(lang));
         double radius = 20;
         GeoPoint center = new GeoPoint(lat, lang);
+
 
         firebaseFirestore
                 .collection("Owner")
