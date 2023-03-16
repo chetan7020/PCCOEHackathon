@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Add_review">
+
+
+
+    <TextView
+        android:id="@+id/review_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Review"
+        android:textSize="30dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/orange"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_below="@id/review_txt">
+
+
+        <TextView
+            android:id="@+id/review_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Yash Sandip Aher"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/review_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reviews are public and include your account and device info. it also help to recommended the best food mess"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_below="@id/review_username"
+            android:textSize="16dp"
+            android:textColor="@color/dark_grey"
+            android:layout_marginTop="10dp"/>
+
+
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/rating_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/review_info"
+            android:layout_marginTop="30dp"/>
+
+
+        <EditText
+            android:id="@+id/descibe_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="@drawable/editext_drawable"
+            android:layout_below="@id/rating_bar"
+            android:layout_marginTop="40dp"
+            android:hint="Describe your experience"
+            android:fontFamily="@font/poppins_medium"
+            android:inputType="text|textMultiLine"
+            android:gravity="top"/>
+
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/btn_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_drawable"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="POST"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="17dp"/>
+
+
+</RelativeLayout>

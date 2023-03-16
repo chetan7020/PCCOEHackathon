@@ -64,6 +64,7 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         getLastLocation();
 
 
+
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -159,6 +160,7 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                             }
 
                         }
+
                     }
                 });
 

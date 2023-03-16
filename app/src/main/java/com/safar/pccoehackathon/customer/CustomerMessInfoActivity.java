@@ -3,6 +3,7 @@ package com.safar.pccoehackathon.customer;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.safar.pccoehackathon.Add_review;
 import com.safar.pccoehackathon.R;
 
 import java.util.ArrayList;
@@ -32,11 +34,12 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private LinearLayout llData;
     private TextView tvMessName, tvLocation, tvPhoneNumber, tvEmail, tvUPI;
-    private Button btnMakePayment;
+    private Button btnMakePayment,btnAddReview;
 
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
     int GOOGLE_PAY_REQUEST_CODE = 123;
     final int PAY_REQUEST = 1;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
         tvEmail = findViewById(R.id.tvEmail);
         tvUPI = findViewById(R.id.tvUPI);
+        btnAddReview = findViewById(R.id.btnAddReview);
 
         btnMakePayment = findViewById(R.id.btnMakePayment);
 
@@ -65,6 +69,18 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
                 payUsingUpi();
             }
         });
+
+        btnAddReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(CustomerMessInfoActivity.this, Add_review.class);
+                startActivity(intent);
+
+            }
+        });
+
+
 
     }
 

@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.5.0'
 
     implementation 'com.firebase:geofire-android:3.1.0'
+    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 
 }
 
