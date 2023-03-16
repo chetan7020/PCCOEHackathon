@@ -6,6 +6,12 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
+        android:id="@+id/navigation_order"
+        android:name="com.safar.pccoehackathon.customer.ui.CustomerOrderFragment"
+        android:label="Orders"
+        tools:layout="@layout/fragment_customer_order" />
+
+    <fragment
         android:id="@+id/navigation_home"
         android:name="com.safar.pccoehackathon.customer.ui.CustomerHomeFragment"
         android:label="@string/title_home"

@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_order"
+        android:icon="@drawable/baseline_pedal_bike_24"
+        android:title="Orders" />
+
+    <item
         android:id="@+id/navigation_diet"
         android:icon="@drawable/baseline_food_bank_24"
         android:title="Diet" />
