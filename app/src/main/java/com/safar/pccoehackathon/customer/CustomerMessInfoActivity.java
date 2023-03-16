@@ -35,6 +35,8 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
     private LinearLayout llData;
     private TextView tvMessName, tvLocation, tvPhoneNumber, tvEmail, tvUPI;
     private Button btnMakePayment,btnAddReview;
+    int avg_review;
+    int customer_count;
 
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
     int GOOGLE_PAY_REQUEST_CODE = 123;
@@ -75,6 +77,9 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(CustomerMessInfoActivity.this, Add_review.class);
+                intent.putExtra("email", email);
+                intent.putExtra("avg_review", String.valueOf(avg_review));
+                intent.putExtra("customer_count", String.valueOf(customer_count));
                 startActivity(intent);
 
             }
@@ -165,6 +170,7 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvContents = messDishView.findViewById(R.id.tvContents);
         tvAllergies = messDishView.findViewById(R.id.tvAllergies);
         tvType = messDishView.findViewById(R.id.tvType);
+        Button btnOrderNow = messDishView.findViewById(R.id.order_now);
 
         tvDishName.setText(plateName);
         tvPrice.setText(price);
@@ -173,6 +179,13 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvContents.setText(contents);
         tvAllergies.setText(allergies);
         tvType.setText(type);
+
+        btnOrderNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         llData.addView(messDishView);
     }
@@ -189,6 +202,9 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
                         String phoneNumber = value.getString("ownerphone");
                         String email = value.getString("email");
                         String upi = value.getString("upi");
+                        avg_review = Integer.parseInt(value.getString("avg_review"));
+                        customer_count = Integer.parseInt(value.getString("customer_count"));
+                        Log.d("TAG", "onCreate: "+email+avg_review+customer_count);
 
                         tvMessName.setText(messName);
                         tvLocation.setText(location);
