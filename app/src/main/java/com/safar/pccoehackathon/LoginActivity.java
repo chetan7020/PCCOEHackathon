@@ -146,7 +146,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpCustomer.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -155,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, OwnerSignUpActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -200,14 +198,14 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
                                             startActivity(new Intent(LoginActivity.this, OwnerMainActivity.class));
-                                            progressDialog.cancel();
+                                            progressDialog.dismiss();
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            progressDialog.cancel();
+                                            progressDialog.dismiss();
                                         }
                                     });
                         }
