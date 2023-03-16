@@ -1,5 +1,7 @@
 package com.safar.pccoehackathon.customer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,6 +34,18 @@ public class CustomerMainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_customer_main);
         NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setMessage("Are you want to exit?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No",null).show();
+        // super.onBackPressed();
     }
 
 }
