@@ -29,12 +29,16 @@ import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.safar.pccoehackathon.databinding.ActivityOwnerSignUpBinding;
 
 import java.io.IOException;
@@ -53,6 +57,7 @@ public class OwnerSignUpActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE=100;
     String sample,currentlocation;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,9 +166,33 @@ public class OwnerSignUpActivity extends AppCompatActivity {
 
                                     String geohash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lang));
 
+                                    // Code to get Device Token
+
+                                    FirebaseMessaging.getInstance().getToken()
+                                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<String> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                                                        return;
+                                                    }
+
+                                                    // Get new FCM registration token
+                                                    token = task.getResult();
+
+                                                }
+                                            });
+
+                                    String userUID = "69";
+                                    FirebaseUser firebaseUser;
+                                    firebaseUser = auth.getCurrentUser();
+                                    if (firebaseUser != null) {
+                                        userUID = firebaseUser.getUid().toString();
+                                    }
+
                                     firebaseFirestore.collection("Owner")
                                             .document(email)
-                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, lat, lang, new GeoPoint(lat, lang), geohash));
+                                            .set(new UserModel(id, name, messname, ownerphone, upi, email, monthlyPrice, location, lat, lang, new GeoPoint(lat, lang), geohash,token,userUID));
 
                                     startActivity(intent);
                                     progressDialog.cancel();

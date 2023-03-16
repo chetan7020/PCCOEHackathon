@@ -3,7 +3,7 @@ package com.safar.pccoehackathon;
 import com.google.firebase.firestore.GeoPoint;
 
 public class UserModel {
-    private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice, geohash;
+    private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice, geohash, token, userUID;
 
     String avg_review;
 
@@ -67,7 +67,7 @@ public class UserModel {
         this.geohash = geohash;
     }
 
-    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, double lat, double lang, GeoPoint geoPointLocation, String geohash) {
+    public UserModel(String id, String name, String messname, String ownerphone, String upi, String email, String monthlyPrice, String location, double lat, double lang, GeoPoint geoPointLocation, String geohash, String token, String userUID) {
         this.name = name;
         this.id = id;
         this.messname = messname;
@@ -84,6 +84,8 @@ public class UserModel {
         this.geohash = geohash;
         this.avg_review = "0";
         this.customer_count = "0";
+        this.token = token;
+        this.userUID = userUID;
     }
 
     public String getAvg_review() {
@@ -168,6 +170,21 @@ public class UserModel {
 
     public void setUpi(String upi) {
         this.upi = upi;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID ;
     }
 }
 
