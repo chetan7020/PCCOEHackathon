@@ -5,9 +5,9 @@ import com.google.firebase.firestore.GeoPoint;
 public class UserModel {
     private String id, name, messname, ownerphone, upi, email, location, totalCustomer, remainingPayment, monthlyPrice, geohash;
 
-    double avg_review;
+    String avg_review;
 
-    int customer_count;
+    String customer_count;
 
     double lat, lang;
 
@@ -41,22 +41,6 @@ public class UserModel {
 
     public void setLat(double lat) {
         this.lat = lat;
-    }
-
-    public double getAvg_review() {
-        return avg_review;
-    }
-
-    public void setAvg_review(double avg_review) {
-        this.avg_review = avg_review;
-    }
-
-    public int getCustomer_count() {
-        return customer_count;
-    }
-
-    public void setCustomer_count(int customer_count) {
-        this.customer_count = customer_count;
     }
 
     public double getLang() {
@@ -98,8 +82,24 @@ public class UserModel {
         this.lat = lat;
         this.lang = lang;
         this.geohash = geohash;
-        this.avg_review = 0.0;
-        this.customer_count = 0;
+        this.avg_review = "0";
+        this.customer_count = "0";
+    }
+
+    public String getAvg_review() {
+        return avg_review;
+    }
+
+    public void setAvg_review(String avg_review) {
+        this.avg_review = avg_review;
+    }
+
+    public String getCustomer_count() {
+        return customer_count;
+    }
+
+    public void setCustomer_count(String customer_count) {
+        this.customer_count = customer_count;
     }
 
     public String getLocation() {
