@@ -49,6 +49,9 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
     private FragmentHomeBinding binding;
     private FirebaseFirestore firebaseFirestore;
     FusedLocationProviderClient fusedLocationProviderClient;
+
+    public static double cusLat, cusLang;
+    public static String customerlat,customerlang;
     private final static int REQUEST_CODE = 100;
 
 
@@ -62,8 +65,6 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         getLastLocation();
-
-
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -236,6 +237,12 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                                 List<Address> addresses = null;
                                 try {
                                     addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                    cusLat = addresses.get(0).getLatitude();
+                                    cusLang = addresses.get(0).getLongitude();
+
+                                    customerlat = addresses.get(0).getAddressLine(100);
+                                    customerlang = addresses.get(0).getAddressLine(100);
 
                                     getAllOwners(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
 
