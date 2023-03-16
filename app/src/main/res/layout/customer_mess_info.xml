@@ -17,8 +17,8 @@
             <LinearLayout
                 android:id="@+id/relLayout1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/orange"
+                android:layout_height="200dp"
+                android:background="@drawable/mess_bg_1"
                 android:orientation="vertical">
 
 
@@ -42,45 +42,20 @@
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Mobile -"
-                            android:textAlignment="textStart" />
-
-                        <TextView
-                            android:id="@+id/tvPhoneNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textAlignment="textStart" />
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="UPI -"
-                            android:textAlignment="textStart" />
 
                         <TextView
                             android:id="@+id/tvUPI"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:visibility="invisible"
+                            android:textSize="1dp"
                             android:fontFamily="@font/poppins_medium"
                             android:textAlignment="textStart" />
 
@@ -91,20 +66,16 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Email -"
-                            android:textAlignment="textStart" />
 
                         <TextView
                             android:id="@+id/tvEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textAlignment="textStart" />
+                            android:textSize="1dp"
+                            android:visibility="invisible"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/poppins_medium" />
 
                     </LinearLayout>
 
@@ -113,24 +84,48 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Address-"
-                            android:textAlignment="textStart" />
+                            android:text="location"
+                            android:visibility="invisible"
+                            android:layout_weight="1.7"/>
 
                         <TextView
                             android:id="@+id/tvLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/poppins_medium"
-                            android:textAlignment="textStart" />
+                            android:textAlignment="textStart"/>
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relLayout1"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile number -"/>
+
+                <TextView
+                    android:id="@+id/tvPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textAlignment="textStart" />
 
             </LinearLayout>
 
@@ -138,7 +133,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/relLayout1"
+                android:layout_below="@id/linear_layout_5"
                 android:orientation="vertical">
 
 
