@@ -170,7 +170,6 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvContents = messDishView.findViewById(R.id.tvContents);
         tvAllergies = messDishView.findViewById(R.id.tvAllergies);
         tvType = messDishView.findViewById(R.id.tvType);
-        Button btnOrderNow = messDishView.findViewById(R.id.order_now);
 
         tvDishName.setText(plateName);
         tvPrice.setText(price);
@@ -179,13 +178,6 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvContents.setText(contents);
         tvAllergies.setText(allergies);
         tvType.setText(type);
-
-        btnOrderNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         llData.addView(messDishView);
     }
