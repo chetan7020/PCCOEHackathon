@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,14 +46,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentHomeBinding binding;
     private FirebaseFirestore firebaseFirestore;
     FusedLocationProviderClient fusedLocationProviderClient;
+
+    public static double cusLat, cusLang;
+    public static String customerlat,customerlang;
     private final static int REQUEST_CODE = 100;
+        binding.rgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
 
+                if (checkedRadioButton.getId() == R.id.rbLocation){
+                    binding.llData.removeAllViews();
+                    getLastLocation();
+                }else if(checkedRadioButton.getId() == R.id.rbReview){
+                    binding.llData.removeAllViews();
+                    getDataByReview();
+                }
+            }
+        });
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,8 +82,6 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         getLastLocation();
-
-
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -93,6 +111,52 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
         });
 
         return binding.getRoot();
+
+    }
+
+    private void getDataByReview() {
+        firebaseFirestore
+                .collection("Owner")
+                .orderBy("avg_review")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            String id = dc.getDocument().getId();
+                            String messname = dc.getDocument().getData().get("messname").toString();
+                            String location = dc.getDocument().getData().get("location").toString();
+                            String monthlyPrice = dc.getDocument().getData().get("monthlyPrice").toString();
+                            String email = dc.getDocument().getData().get("email").toString();
+                            String avg_review = dc.getDocument().getData().get("avg_review").toString();
+
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d("TAG", "onEvent: " + "ADDED");
+                                    createCard(id, messname, location, monthlyPrice, email, avg_review);
+                                    break;
+                                case MODIFIED:
+                                    Log.d("TAG", "onEvent: " + "MODIFIED");
+                                    updateCard(id, messname, location, monthlyPrice, email, avg_review);
+                                    break;
+                                case REMOVED:
+                                    Log.d("TAG", "onEvent: " + "ADDED");
+                                    for (int i = 0; i < binding.llData.getChildCount(); i++) {
+
+                                        TextView tvID = binding.llData.getChildAt(i).findViewById(R.id.tvID);
+
+                                        String firebase_id = tvID.getText().toString().trim();
+
+                                        if (firebase_id.equals(id)) {
+                                            binding.llData.removeView(binding.llData.getChildAt(i));
+                                        }
+                                    }
+                                    break;
+                            }
+
+                        }
+
+                    }
+                });
 
     }
 
@@ -132,17 +196,20 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                             String location = dc.getDocument().getData().get("location").toString();
                             String monthlyPrice = dc.getDocument().getData().get("monthlyPrice").toString();
                             String email = dc.getDocument().getData().get("email").toString();
+                            String avg_review = dc.getDocument().getData().get("avg_review").toString();
+
+                            Log.d("TAG", "onEvent: "+avg_review);
 
                             GeoPoint lc = dc.getDocument().getGeoPoint("geo_pointLocation");
 
                             switch (dc.getType()) {
                                 case ADDED:
                                     Log.d("TAG", "onEvent: " + "ADDED");
-                                    createCard(id, messname, location, monthlyPrice, email);
+                                    createCard(id, messname, location, monthlyPrice, email, avg_review);
                                     break;
                                 case MODIFIED:
                                     Log.d("TAG", "onEvent: " + "MODIFIED");
-                                    updateCard(id, messname, location, monthlyPrice, email);
+                                    updateCard(id, messname, location, monthlyPrice, email, avg_review);
                                     break;
                                 case REMOVED:
                                     Log.d("TAG", "onEvent: " + "ADDED");
@@ -166,15 +233,19 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
 
     }
 
-    private void updateCard(String id, String messname, String location, String monthlyPrice, String email) {
+    private void updateCard(String id, String messname, String location, String monthlyPrice, String email, String avg_review) {
         for (int i = 0; i < binding.llData.getChildCount(); i++) {
             TextView tvMessName, tvMonthlyPrice, tvLocation, tvMail, tvID;
+
+            MaterialRatingBar rating;
 
             tvID = binding.llData.findViewById(R.id.tvID);
             tvMessName = binding.llData.findViewById(R.id.tvMessName);
             tvMonthlyPrice = binding.llData.findViewById(R.id.tvMonthlyPrice);
             tvLocation = binding.llData.findViewById(R.id.tvLocation);
             tvMail = binding.llData.findViewById(R.id.tvMail);
+
+            rating = binding.llData.findViewById(R.id.rating);
 
 
             if (tvID.getText().toString().trim().equals(id)) {
@@ -184,18 +255,20 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                 tvLocation.setText(location);
                 tvMail.setText(email);
 
+                rating.setRating(Float.parseFloat(avg_review));
+
             }
 
         }
 
     }
 
-    private void createCard(String id, String messname, String location, String monthlyPrice, String email) {
+    private void createCard(String id, String messname, String location, String monthlyPrice, String email, String avg_review) {
         View messView = getLayoutInflater().inflate(R.layout.activity_layout_customer_mess_container, null, false);
-
 
         TextView tvMessName, tvMonthlyPrice, tvLocation, tvMail, tvID;
         LinearLayout llView;
+        MaterialRatingBar rating;
 
         tvID = messView.findViewById(R.id.tvID);
         tvMessName = messView.findViewById(R.id.tvMessName);
@@ -205,11 +278,15 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
 
         llView = messView.findViewById(R.id.llView);
 
+        rating = messView.findViewById(R.id.rating);
+
         tvID.setText(id);
         tvMessName.setText(messname);
         tvMonthlyPrice.setText(monthlyPrice);
         tvLocation.setText(location);
         tvMail.setText(email);
+
+        rating.setRating(Float.parseFloat(avg_review));
 
         llView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,6 +313,12 @@ public class CustomerHomeFragment extends Fragment implements OnMapReadyCallback
                                 List<Address> addresses = null;
                                 try {
                                     addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                    cusLat = addresses.get(0).getLatitude();
+                                    cusLang = addresses.get(0).getLongitude();
+
+                                    customerlat = addresses.get(0).getAddressLine(100);
+                                    customerlang = addresses.get(0).getAddressLine(100);
 
                                     getAllOwners(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
 

@@ -39,96 +39,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:scrollbars="none"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:scrollbars="none">
 
 
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/rgFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:paddingBottom="10dp"
             android:orientation="horizontal">
 
-
-            <TextView
-                android:id="@+id/veg_filter"
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/rbLocation"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_drawable"
-                android:fontFamily="@font/poppins"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Veg"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/non_veg_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_drawable"
-                android:fontFamily="@font/poppins"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Non-Veg"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/vegan_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_drawable"
-                android:fontFamily="@font/poppins"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Vegan"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/rating_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_drawable"
-                android:fontFamily="@font/poppins"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Rating"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/location_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_drawable"
-                android:fontFamily="@font/poppins"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/radio_selector"
+                android:button="@android:color/transparent"
+                android:checked="true"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:padding="10dp"
                 android:text="Location"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@drawable/text_color" />
 
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/rbReview"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/radio_selector"
+                android:button="@android:color/transparent"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Review"
+                android:textColor="@drawable/text_color" />
 
-
-
+        </RadioGroup>
 
 
     </HorizontalScrollView>

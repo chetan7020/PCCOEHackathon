@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,13 +36,18 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private LinearLayout llData;
     private TextView tvMessName, tvLocation, tvPhoneNumber, tvEmail, tvUPI;
-    private Button btnMakePayment,btnAddReview;
+    private Button btnMakePayment, btnAddReview;
     int avg_review;
     int customer_count;
+
+    double lat, lang;
+
+    String paymentStatus;
 
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
     int GOOGLE_PAY_REQUEST_CODE = 123;
     final int PAY_REQUEST = 1;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +66,13 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
 
         btnMakePayment = findViewById(R.id.btnMakePayment);
 
+        paymentStatus = "";
+
         llData = findViewById(R.id.llData);
 
         setHeader(email);
 
         getDishes(email);
-
         btnMakePayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,50 +94,44 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     private void getDishes(String email) {
-        firebaseFirestore
-                .collection("Owner")
-                .document(email)
-                .collection("plates")
-                .whereEqualTo("available","Yes")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            String id = dc.getDocument().getId();
-                            String plateName = dc.getDocument().getData().get("plateName").toString();
-                            String type = dc.getDocument().getData().get("type").toString();
-                            String allergies = dc.getDocument().getData().get("allergies").toString();
-                            String price = dc.getDocument().getData().get("price").toString();
-                            String contents = dc.getDocument().getData().get("contents").toString();
-                            String available = dc.getDocument().getData().get("available").toString();
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    createCard(id, plateName, price, available, contents, allergies, type);
-                                    break;
-                                case MODIFIED:
-                                    updatePlate(id, plateName, price, available, contents, allergies, type);
-                                    break;
-                                case REMOVED:
-                                    for (int i = 0; i < llData.getChildCount(); i++) {
+        firebaseFirestore.collection("Owner").document(email).collection("plates").whereEqualTo("available", "Yes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for (DocumentChange dc : value.getDocumentChanges()) {
+                    String id = dc.getDocument().getId();
+                    String plateName = dc.getDocument().getData().get("plateName").toString();
+                    String type = dc.getDocument().getData().get("type").toString();
+                    String allergies = dc.getDocument().getData().get("allergies").toString();
+                    String price = dc.getDocument().getData().get("price").toString();
+                    String contents = dc.getDocument().getData().get("contents").toString();
+                    String available = dc.getDocument().getData().get("available").toString();
+                    switch (dc.getType()) {
+                        case ADDED:
+                            createCard(id, plateName, price, available, contents, allergies, type);
+                            break;
+                        case MODIFIED:
+                            updatePlate(id, plateName, price, available, contents, allergies, type);
+                            break;
+                        case REMOVED:
+                            for (int i = 0; i < llData.getChildCount(); i++) {
 
-                                        TextView tvID = llData.getChildAt(i).findViewById(R.id.tvID);
+                                TextView tvID = llData.getChildAt(i).findViewById(R.id.tvID);
 
-                                        String firebase_id = tvID.getText().toString().trim();
+                                String firebase_id = tvID.getText().toString().trim();
 
-                                        if (firebase_id.equals(id)) {
-                                            llData.removeView(llData.getChildAt(i));
-                                        }
-                                    }
-                                    break;
+                                if (firebase_id.equals(id)) {
+                                    llData.removeView(llData.getChildAt(i));
+                                }
                             }
-                        }
-
+                            break;
                     }
-                });
+                }
+
+            }
+        });
     }
 
     private void updatePlate(String id, String plateName, String price, String available, String contents, String allergies, String type) {
@@ -161,7 +163,7 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
     private void createCard(String id, String plateName, String price, String available, String contents, String allergies, String type) {
         View messDishView = getLayoutInflater().inflate(R.layout.layout_customer_mess_dish_info, null, false);
 
-        TextView tvDishName, tvPrice, tvID, tvAvailable, tvContents, tvAllergies, tvType;
+        TextView tvDishName, tvPrice, tvID, tvAvailable, tvContents, tvAllergies, tvType, order_now;
 
         tvDishName = messDishView.findViewById(R.id.tvDishName);
         tvPrice = messDishView.findViewById(R.id.tvPrice);
@@ -170,6 +172,7 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvContents = messDishView.findViewById(R.id.tvContents);
         tvAllergies = messDishView.findViewById(R.id.tvAllergies);
         tvType = messDishView.findViewById(R.id.tvType);
+        order_now = messDishView.findViewById(R.id.order_now);
 
         tvDishName.setText(plateName);
         tvPrice.setText(price);
@@ -179,43 +182,75 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
         tvAllergies.setText(allergies);
         tvType.setText(type);
 
+        order_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = new Dialog(CustomerMessInfoActivity.this);
+
+                dialog.setContentView(R.layout.layout_customer_make_payment);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                Button btnOnDelivery, btnMakePayment;
+
+                btnOnDelivery = dialog.findViewById(R.id.btnOnDelivery);
+                btnMakePayment = dialog.findViewById(R.id.btnMakePayment);
+
+                btnOnDelivery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        paymentStatus = "NotPaid";
+                        addOrder();
+
+                    }
+                });
+
+                btnMakePayment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        payUsingUpi();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
         llData.addView(messDishView);
     }
 
-    private void setHeader(String email) {
-        firebaseFirestore
-                .collection("Owner")
-                .document(email)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        String messName = value.getString("messname");
-                        String location = value.getString("location");
-                        String phoneNumber = value.getString("ownerphone");
-                        String email = value.getString("email");
-                        String upi = value.getString("upi");
-                        avg_review = Integer.parseInt(value.getString("avg_review"));
-                        customer_count = Integer.parseInt(value.getString("customer_count"));
-                        Log.d("TAG", "onCreate: "+email+avg_review+customer_count);
+    private void addOrder() {
 
-                        tvMessName.setText(messName);
-                        tvLocation.setText(location);
-                        tvPhoneNumber.setText(phoneNumber);
-                        tvEmail.setText(email);
-                        tvUPI.setText(upi);
-                    }
-                });
+    }
+
+    private void setHeader(String email) {
+        firebaseFirestore.collection("Owner").document(email).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                String messName = value.getString("messname");
+                String location = value.getString("location");
+                String phoneNumber = value.getString("ownerphone");
+                String email = value.getString("email");
+                String upi = value.getString("upi");
+                avg_review = Integer.parseInt(value.getString("avg_review"));
+                customer_count = Integer.parseInt(value.getString("customer_count"));
+                lat = Double.parseDouble(value.getString("lat"));
+                lang = Double.parseDouble(value.getString("lang"));
+                Log.d("TAG", "onCreate: " + email + avg_review + customer_count);
+
+                tvMessName.setText(messName);
+                tvLocation.setText(location);
+                tvPhoneNumber.setText(phoneNumber);
+                tvEmail.setText(email);
+                tvUPI.setText(upi);
+            }
+        });
     }
 
     private void payUsingUpi() {
 
-        Uri uri =
-                new Uri.Builder()
-                        .scheme("upi")
-                        .authority("pay")
-                        .appendQueryParameter("pa", tvUPI.getText().toString().trim())
-                        .appendQueryParameter("pn", tvMessName.getText().toString().trim())
-                        .build();
+        Uri uri = new Uri.Builder().scheme("upi").authority("pay").appendQueryParameter("pa", tvUPI.getText().toString().trim()).appendQueryParameter("pn", tvMessName.getText().toString().trim()).build();
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
@@ -256,7 +291,7 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
 
     void upiPaymentCheck(String data) {
 
-        Log.d("TAG", "upiPaymentCheck: "+data);
+        Log.d("TAG", "upiPaymentCheck: " + data);
         String str = data;
         String payment_cancel = "";
         String status = "";
@@ -273,6 +308,8 @@ public class CustomerMessInfoActivity extends AppCompatActivity {
             }
 
             if (status.equals("success")) {
+                paymentStatus = "Paid";
+                addOrder();
                 Toast.makeText(CustomerMessInfoActivity.this, "Transaction Successfully", Toast.LENGTH_SHORT).show();
             } else if ("Payment Cancel".equals(payment_cancel)) {
                 Toast.makeText(CustomerMessInfoActivity.this, "Payment Cancel by user", Toast.LENGTH_SHORT).show();
