@@ -42,8 +42,8 @@ public class OwnerFoodFragment extends Fragment {
     private Dialog dialog;
     private FirebaseAuth firebaseAuth;
 
-    String[] foodtypeitem = {"Veg","Non-Veg","Veg / Nog-Veg"};
-    String[] foodallergies = {"throat","mutton","chapati"};
+    String[] foodtypeitem = {"Veg", "Non-Veg", "Veg / Nog-Veg"};
+    String[] foodallergies = {"throat", "mutton", "chapati"};
 
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
@@ -67,7 +67,6 @@ public class OwnerFoodFragment extends Fragment {
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
-
                 EditText etPlateName, etPlatePrice, etContents;
                 AutoCompleteTextView actvPlateType, actvAllergies;
                 ImageView upload_img;
@@ -86,9 +85,8 @@ public class OwnerFoodFragment extends Fragment {
                 btnAddDish = dialog.findViewById(R.id.btnAddDish);
 
 
-
                 autoCompleteTextView = dialog.findViewById(R.id.actvPlateType);
-                adapterItems = new ArrayAdapter<String>(getActivity(),R.layout.list_item_1, foodtypeitem);
+                adapterItems = new ArrayAdapter<String>(getActivity(), R.layout.list_item_1, foodtypeitem);
                 autoCompleteTextView.setAdapter(adapterItems);
 
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,10 +94,10 @@ public class OwnerFoodFragment extends Fragment {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         String item = adapterView.getItemAtPosition(i).toString();
                     }
-         });
+                });
 
                 autoCompleteTextView = dialog.findViewById(R.id.actvAllergies);
-                adapterItems1 = new ArrayAdapter<String>(getActivity(),R.layout.list_item_1, foodallergies);
+                adapterItems1 = new ArrayAdapter<String>(getActivity(), R.layout.list_item_1, foodallergies);
                 autoCompleteTextView.setAdapter(adapterItems1);
 
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -328,7 +326,6 @@ public class OwnerFoodFragment extends Fragment {
                 deleteFood(tvID.getText().toString());
             }
         });
-
 
 
         binding.llData.addView(plateView);
